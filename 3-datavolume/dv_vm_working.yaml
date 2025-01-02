@@ -1,0 +1,51 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: vm-win10
+  namespace: testnamespace
+spec:
+  runStrategy: Manual
+  template:
+    metadata:
+      labels:
+        vm: win10
+    spec:
+      domain:
+        cpu:
+          cores: 2
+        devices:
+          disks:
+          - disk:
+              bus: virtio
+            name: harddrive
+            bootOrder: 1
+          interfaces:
+          - masquerade: {}
+            model: e1000
+            name: default  
+        machine:
+          type: q35
+        resources:
+          requests:
+            memory: 4G
+      networks:
+      - name: default
+        pod: {}
+      volumes:
+        - dataVolume:
+            name: win10-datavolume-template
+          name: harddrive
+  dataVolumeTemplates:
+    - metadata:
+        name: win10-datavolume-template
+      spec:
+        pvc:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 25Gi
+        source: #This is the source where the harddisk file resides
+          pvc:
+            name: win10base
+            namespace: testnamespace

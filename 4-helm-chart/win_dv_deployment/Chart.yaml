@@ -1,0 +1,4 @@
+apiVersion: v2
+name: win_helm_test
+description: First deployment test of win10
+version: 1.33.7

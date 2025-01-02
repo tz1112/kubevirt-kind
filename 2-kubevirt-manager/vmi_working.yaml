@@ -1,0 +1,19 @@
+apiVersion: kubevirt.io/v1
+metadata:
+  name: testvmi-pvc
+  namespace: testnamespace
+kind: VirtualMachineInstance
+spec:
+  domain:
+    resources:
+      requests:
+        memory: 4G
+    devices:
+      disks:
+        - disk:
+            bus: virtio
+          name: mypvcdisk
+  volumes:
+    - name: mypvcdisk
+      persistentVolumeClaim:
+        claimName: win10base
